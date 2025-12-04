@@ -1,0 +1,14 @@
+public class PosionBallGame{
+
+/*create scoreboard 
+*prompting player name
+*round counter
+*determine last survivor
+*lives reset constant
+*call other classes
+*/
+var String PlayerName;
+var int RoundCounter;
+var int LiveCounter;
+var int SurvivorsRemaining;
+} 
