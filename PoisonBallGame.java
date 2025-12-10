@@ -20,5 +20,5 @@ public class Player{
     this.health = health;
     this.lifeCounter = lifeCounter;
 }
-
+//comment from JBailey
 }
