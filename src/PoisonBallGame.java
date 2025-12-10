@@ -1,6 +1,8 @@
 
 public class PoisonBallGame{
+    public static void main(String[] args) {
 
+    }
 /*create scoreboard 
 *prompting player name
 *round counter
