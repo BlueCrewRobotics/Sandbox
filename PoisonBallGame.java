@@ -1,5 +1,5 @@
 
-public class PosionBallGame{
+public class PoisonBallGame{
 
 /*create scoreboard 
 *prompting player name
