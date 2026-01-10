@@ -33,17 +33,22 @@ public static String choiceToString(int choice) {
 }
 
     // Function to play RPS
-    public static String playRPS(int p1, int p2) {
+    public static String playRPS(int p1, int p2, Player player1, Player player2) {
+         System.out.println(player1.name + " chooses " + choiceToString(p1));
+         System.out.println(player2.name + " chooses " + choiceToString(p2));
         
         if (p1 == p2) return "It's a tie!";
 
         // 1 = Rock, 2 = Paper, 3 = Scissors
-        if ((p1 == 1 && p2 == 3) ||
-            (p1 == 2 && p2 == 1) ||
-            (p1 == 3 && p2 == 2)) {
-            return "Player 1 wins!";
-        } else {
-            return "Player 2 wins!";
+        if ((p1 == 1 && p2 == 3) || (p1 == 2 && p2 == 1) || (p1 == 3 && p2 == 2)) {
+            player2.lose();
+            return player1.name + " wins!";
+        } else if ((p2 == 1 && p1 == 3) || (p2 == 2 && p1 == 1) || (p2 == 3 && p1 == 2)) {
+            player1.lose();
+            return player2.name + " wins!";
+        }
+        else {
+            return "Invalid input!";
         }
     }
 
@@ -58,18 +63,89 @@ public static String choiceToString(int choice) {
         for (int i = 0; i < amountOfPlayers; i++) {
             System.out.println("Enter name for player " + (i + 1) + ": ");
             String playerName = scanner.nextLine();
-            players.add(new Player(playerName));
+            players.add(new Player(playerName + " "));
         }
-        while (players.size() > 1) {
+            
+        int currentPoisonPlayer = players.size() - 1;
+        int randomIndex = rand.nextInt(players.size() - 1);
+
+         System.out.println(players.get(currentPoisonPlayer).name + " is the poison player and chooses to fight " + players.get(randomIndex).name);
+            System.out.println("Enter 1 for Rock, 2 for Paper, 3 for Scissors");
+            // Get player 1 input
+            System.out.print(players.get(currentPoisonPlayer).name + "enter your choice: ");
+            
+            int player1choice = scanner.nextInt();
+            
+            System.out.print(players.get(randomIndex).name + "enter your choice: ");
+            int player2choice = scanner.nextInt();
+            
+            int[] currentplayerlives = {players.get(currentPoisonPlayer).lives, players.get(randomIndex).lives};
+            
+            playRPS(player1choice, player2choice, players.get(currentPoisonPlayer), players.get(randomIndex));
+           
+            if (players.get(currentPoisonPlayer).lives < currentplayerlives[0]) {
+                System.out.println(players.get(currentPoisonPlayer).name + " remains the poison player.");
+            } 
+            
+            else if (players.get(randomIndex).lives < currentplayerlives[1]) {
+                System.out.println(players.get(randomIndex).name + " is now the poison player.");
+                currentPoisonPlayer = randomIndex;
+            } 
+            
+            else {
+                System.out.println("No lives lost, poison player remains the same.");
+            }
+
+        
+            while (players.size() > 1) {
+            
+                if (players.get(currentPoisonPlayer).isDead()) {
+                currentPoisonPlayer = rand.nextInt(players.size());
+                do {
+        randomIndex = rand.nextInt(players.size());
+    } while (players.get(randomIndex).isDead());
+            }
+            
             players.removeIf(Player::isDead);
-            int firstplayerIndex = players.size() - 1;
-            int randomIndex = rand.nextInt(players.size() - 1);
-            System.out.println(players.get(firstplayerIndex).name + " is the poison player and chooses to fight " + players.get(randomIndex).name);
+            if (players.size() <= 1) {
+                break;
+            }
 
+            do {
+        randomIndex = rand.nextInt(players.size());
+    } while (randomIndex == currentPoisonPlayer);
 
-
+            System.out.println(players.get(currentPoisonPlayer).name + " is the poison player and chooses to fight " + players.get(randomIndex).name);
+            System.out.println("Enter 1 for Rock, 2 for Paper, 3 for Scissors");
+            // Get player 1 input
+            System.out.print(players.get(currentPoisonPlayer).name + "enter your choice: ");
+            
+            player1choice = scanner.nextInt();
+            
+            System.out.print(players.get(randomIndex).name + "enter your choice: ");
+            player2choice = scanner.nextInt();
+            
+            currentplayerlives[0] = players.get(currentPoisonPlayer).lives;
+            currentplayerlives[1] = players.get(randomIndex).lives;
+            
+            playRPS(player1choice, player2choice, players.get(currentPoisonPlayer), players.get(randomIndex));
+           
+            if (players.get(currentPoisonPlayer).lives < currentplayerlives[0]) {
+                System.out.println(players.get(currentPoisonPlayer).name + " remains the poison player.");
+            } 
+            
+            else if (players.get(randomIndex).lives < currentplayerlives[1]) {
+                System.out.println(players.get(randomIndex).name + " is now the poison player.");
+                currentPoisonPlayer = randomIndex;
+            } 
+            
+            else {
+                System.out.println("No lives lost, poison player remains the same.");
+            }
+        }
+        System.out.println(players.get(0).name + " is the last survivor and wins the game!");
         scanner.close();
-      }
+      
     }
 }
     /*
